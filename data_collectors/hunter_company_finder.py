@@ -52,33 +52,104 @@ class HunterCompanyFinder:
     def _get_industry_domains(self, industry: str) -> List[str]:
         """Get industry-specific domains to search"""
         
-        # Real manufacturing companies in Chicago area
-        if "manufacturing" in industry.lower():
+        # Maryland high school examples by industry
+        if "education" in industry.lower() or "high schools" in industry.lower():
             return [
-                "caterpillar.com",
-                "johnsoncontrols.com", 
-                "navistar.com",
-                "motorolasolutions.com",
-                "uline.com",
-                "grainger.com",
-                "wrigley.com",
-                "kraftheinz.com",
-                "mcdonalds.com",
-                "boeing.com",
-                "abbott.com",
-                "baxter.com",
-                "zimmerbiomet.com",
-                "illinoistoolworks.com",
-                "tenneco.com",
-                "navistar.com",
-                "triton.com",
-                "crowncork.com",
-                "sherwinwilliams.com",
-                "goodyear.com"
+                "baltimorecityschools.org",     # Baltimore City Public Schools
+                "bcps.org",                     # Baltimore County Public Schools
+                "aacps.org",                    # Anne Arundel County Schools
+                "fcps.org",                     # Frederick County Schools
+                "mcpsmd.org",                   # Montgomery County Schools
+                "hcpss.org",                    # Howard County Schools
+                "carrollk12.org",               # Carroll County Schools
+                "wcpsmd.com",                   # Washington County Schools
+                "allegany.k12.md.us",           # Allegany County Schools
+                "garrettcountyschools.org",     # Garrett County Schools
+                "stpauls-md.org",               # St. Paul's School (Baltimore)
+                "boyslatinmd.com",              # Boys' Latin School
+                "brynmawrschool.org",           # Bryn Mawr School
+                "gilman.edu",                   # Gilman School
+                "calvertschoolmd.org",          # Calvert School
+                "friendsbalt.org",              # Friends School of Baltimore
+                "park-school.org",              # Park School
+                "rolandparkcountry.org",        # Roland Park Country School
+                "mcdonogh.org",                 # McDonogh School
+                "mercyhighschool.com"           # Mercy High School
             ]
-        
-        # Add more industries as needed
-        return ["example.com"]
+        elif "retail" in industry.lower():
+            return [
+                "conveniencestore.com",
+                "liquorstore.com",
+                "hardwarestore.com",
+                "giftstore.com",
+                "bookstore.com",
+                "jewelrystore.com",
+                "clothingstore.com",
+                "shoestore.com",
+                "antiquestore.com",
+                "toystore.com"
+            ]
+        elif "automotive" in industry.lower():
+            return [
+                "autorepair.com",
+                "carwash.com",
+                "tireshop.com",
+                "autobody.com",
+                "mechanic.com",
+                "oilchange.com",
+                "autoparts.com",
+                "towing.com",
+                "detailing.com",
+                "glassrepair.com"
+            ]
+        elif "beauty" in industry.lower():
+            return [
+                "salon.com",
+                "barbershop.com",
+                "spa.com",
+                "nailssalon.com",
+                "tanning.com",
+                "massage.com",
+                "skincare.com",
+                "haircut.com",
+                "beautysupply.com",
+                "esthetics.com"
+            ]
+        elif "home" in industry.lower():
+            return [
+                "painting.com",
+                "plumbing.com",
+                "electrical.com",
+                "hvac.com",
+                "landscaping.com",
+                "cleaning.com",
+                "roofing.com",
+                "carpentry.com",
+                "flooring.com",
+                "handyman.com"
+            ]
+        elif "healthcare" in industry.lower():
+            return [
+                "dental.com",
+                "chiropractic.com",
+                "optometry.com",
+                "pharmacy.com",
+                "physicaltherapy.com",
+                "massagetherapy.com",
+                "acupuncture.com",
+                "nutrition.com",
+                "wellness.com",
+                "fitness.com"
+            ]
+        else:
+            # Generic small business domains
+            return [
+                "smallbusiness.com",
+                "localbusiness.com",
+                "familybusiness.com",
+                "momandpop.com",
+                "localcompany.com"
+            ]
     
     def _enrich_company_by_domain(self, domain: str) -> Optional[Dict]:
         """Enrich company data using Hunter.io domain search"""
@@ -102,21 +173,21 @@ class HunterCompanyFinder:
                         'company_name': company_info.get('organization', domain.split('.')[0].title()),
                         'domain': domain,
                         'website': f"https://{domain}",
-                        'industry': company_info.get('industry', 'Manufacturing'),
+                        'industry': company_info.get('industry', 'Restaurants'),
                         'description': company_info.get('description', ''),
-                        'employee_count': self._parse_headcount(company_info.get('headcount', '100-500')),
+                        'employee_count': self._parse_headcount(company_info.get('headcount', '10-50')),
                         'country': company_info.get('country', 'US'),
-                        'state': company_info.get('state', 'IL'),
-                        'city': company_info.get('city', 'Chicago'),
-                        'location': f"{company_info.get('city', 'Chicago')}, {company_info.get('state', 'IL')}",
+                        'state': company_info.get('state', 'MD'),
+                        'city': company_info.get('city', 'Baltimore'),
+                        'location': f"{company_info.get('city', 'Baltimore')}, {company_info.get('state', 'MD')}",
                         'company_type': company_info.get('company_type', 'Private'),
                         'emails': company_info.get('emails', []),
                         'founded_year': self._estimate_founded_year(company_info),
                         'revenue_range': self._estimate_revenue(company_info),
                         'phone': self._extract_phone(company_info),
                         'decision_makers': self._extract_decision_makers(company_info),
-                        'search_location': f"{company_info.get('city', 'Chicago')}, {company_info.get('state', 'IL')}",
-                        'search_industry': company_info.get('industry', 'Manufacturing')
+                        'search_location': f"{company_info.get('city', 'Baltimore')}, {company_info.get('state', 'MD')}",
+                        'search_industry': company_info.get('industry', 'Restaurants')
                     }
             
             return None

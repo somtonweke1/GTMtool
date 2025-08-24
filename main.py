@@ -102,25 +102,54 @@ class TransitionScout:
         self.linkedin_scraper = None
         logger.info("LinkedIn scraper disabled - using business directory scraping instead")
         
-        # Try to find real companies using Hunter.io first
+        # Try to find real companies using appropriate finder
         if target_locations:
             try:
-                from data_collectors.hunter_company_finder import HunterCompanyFinder
-                hunter_finder = HunterCompanyFinder()
-                real_companies = hunter_finder.find_companies_by_industry(
-                    target_industries[0] if target_industries else "Manufacturing",
-                    target_locations[0] if target_locations else "Chicago, IL"
-                )
-                
-                if real_companies:
-                    self.discovered_companies = real_companies
-                    logger.info(f"✅ Found {len(real_companies)} real companies using Hunter.io")
+                # Check if we're looking for high schools/education
+                if target_industries and any("education" in ind.lower() or "school" in ind.lower() for ind in target_industries):
+                    from data_collectors.high_school_finder import HighSchoolFinder
+                    school_finder = HighSchoolFinder()
+                    
+                    # Use multiple locations to get closer to 50 contacts
+                    if len(target_locations) > 1:
+                        real_companies = school_finder.find_high_schools_multiple_locations(target_locations, max_schools_per_location=15)
+                    else:
+                        # Single location
+                        location = target_locations[0]
+                        if ',' in location:
+                            city, state = location.split(',', 1)
+                            city = city.strip()
+                            state = state.strip()
+                        else:
+                            city = location
+                            state = "MD"  # Default to Maryland
+                        
+                        real_companies = school_finder.find_high_schools(city, state, max_schools=50)
+                    
+                    if real_companies:
+                        self.discovered_companies = real_companies
+                        logger.info(f"✅ Found {len(real_companies)} high schools using High School Finder")
+                    else:
+                        logger.warning("No high schools found. Falling back to sample data.")
+                        self._create_sample_companies()
                 else:
-                    logger.warning("No real companies found with Hunter.io. Falling back to sample data.")
-                    self._create_sample_companies()
+                    # Use Hunter.io for other industries
+                    from data_collectors.hunter_company_finder import HunterCompanyFinder
+                    hunter_finder = HunterCompanyFinder()
+                    real_companies = hunter_finder.find_companies_by_industry(
+                        target_industries[0] if target_industries else "Manufacturing",
+                        target_locations[0] if target_locations else "Chicago, IL"
+                    )
+                    
+                    if real_companies:
+                        self.discovered_companies = real_companies
+                        logger.info(f"✅ Found {len(real_companies)} real companies using Hunter.io")
+                    else:
+                        logger.warning("No real companies found with Hunter.io. Falling back to sample data.")
+                        self._create_sample_companies()
                     
             except Exception as e:
-                logger.warning(f"Hunter.io company finder failed: {e}. Falling back to sample data.")
+                logger.warning(f"Company finder failed: {e}. Falling back to sample data.")
                 self._create_sample_companies()
         else:
             # For demo purposes, create some sample companies

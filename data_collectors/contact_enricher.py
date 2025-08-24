@@ -60,13 +60,13 @@ class ContactEnricher:
             
             # Search for company
             search_params = {
-                'api_key': api_key,
                 'q_organization_name': company_data.get('company_name', ''),
                 'page': 1,
                 'per_page': 10
             }
             
-            response = self.session.get(f"{base_url}/organizations/search", params=search_params)
+            headers = {'X-Api-Key': api_key}
+            response = self.session.get(f"{base_url}/organizations/search", headers=headers, params=search_params)
             response.raise_for_status()
             
             data = response.json()
@@ -75,13 +75,12 @@ class ContactEnricher:
                 
                 # Get people at this organization
                 people_params = {
-                    'api_key': api_key,
                     'organization_id': org['id'],
                     'page': 1,
                     'per_page': 20
                 }
                 
-                people_response = self.session.get(f"{base_url}/people/search", params=people_params)
+                people_response = self.session.get(f"{base_url}/people/search", headers=headers, params=people_params)
                 people_response.raise_for_status()
                 
                 people_data = people_response.json()

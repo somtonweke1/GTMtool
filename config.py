@@ -7,40 +7,50 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Target Business Criteria
+# Target Business Criteria - Maryland High School Financial Education Focus
 TARGET_CRITERIA = {
-    "employee_range": (50, 500),
-    "revenue_range": (5_000_000, 100_000_000),  # $5M - $100M
-    "business_age_min": 15,  # 15+ years
-    "owner_age_range": (55, 70),
+    "employee_range": (20, 200),  # School staff size
+    "revenue_range": (1_000_000, 50_000_000),  # School budgets
+    "business_age_min": 5,  # 5+ years established
+    "owner_age_range": (30, 65),  # Educators and administrators
     "target_industries": [
-        "Manufacturing",
-        "Construction", 
-        "Professional Services",
-        "Healthcare",
-        "Distribution",
-        "Engineering",
-        "Architecture",
-        "Consulting"
+        "Education",
+        "High Schools",
+        "Public Schools",
+        "Private Schools",
+        "Charter Schools",
+        "School Districts",
+        "Educational Services",
+        "Student Services"
     ]
 }
 
-# Geographic Targeting
+# Geographic Targeting - Maryland Focus
 GEOGRAPHIC_TARGETS = {
     "cities": [
-        "New York, NY",
-        "Los Angeles, CA", 
-        "Chicago, IL",
-        "Houston, TX",
-        "Phoenix, AZ",
-        "Philadelphia, PA",
-        "San Antonio, TX",
-        "San Diego, CA",
-        "Dallas, TX",
-        "San Jose, CA"
+        "Baltimore, MD",
+        "Annapolis, MD", 
+        "Frederick, MD",
+        "Rockville, MD",
+        "Gaithersburg, MD",
+        "Columbia, MD",
+        "Ellicott City, MD",
+        "Towson, MD",
+        "Bethesda, MD",
+        "Silver Spring, MD",
+        "Hagerstown, MD",
+        "Cumberland, MD",
+        "Ocean City, MD",
+        "Salisbury, MD",
+        "Laurel, MD",
+        "Glen Burnie, MD",
+        "Dundalk, MD",
+        "Catonsville, MD",
+        "Parkville, MD",
+        "Essex, MD"
     ],
     "states": [
-        "CA", "TX", "NY", "FL", "IL", "PA", "OH", "GA", "NC", "MI"
+        "MD"  # Focus on Maryland only
     ]
 }
 
@@ -92,27 +102,36 @@ OUTPUT_CONFIG = {
     "include_contact_verification": True
 }
 
-# Outreach Templates
+# Outreach Templates - Maryland High School Financial Education Focus
 OUTREACH_TEMPLATES = {
-    "email_subject": "Your Business Succession Plan - Time to Act?",
+    "email_subject": "Financial Literacy Program for {company_name} Students",
     "email_body": """
 Hi {first_name},
 
-I noticed {company_name} has been in business for {business_age} years and thought you might be thinking about what's next.
+I'm reaching out because I believe {company_name} would be the perfect partner for our financial literacy program that's helping high school students learn investing and personal finance.
 
-Many business owners in your position are starting to plan their exit strategy - whether that's selling, transitioning to family, or creating an employee ownership plan.
+Our platform has already helped 10,000+ students with:
+• AI-powered financial education
+• Real investment opportunities (with $2.5M+ invested)
+• 95% success rate in building financial literacy
+• Community-driven learning experience
 
-Would you be interested in a brief conversation about business succession planning? I'd love to share some insights that could save you significant time and money.
+Given that {company_name} serves students in the Baltimore area, I'd love to discuss how we could partner to bring financial education to your school. Many Maryland schools are looking for ways to prepare students for real-world financial decisions.
+
+Would you be interested in a brief call to explore this opportunity? I can share how other schools are implementing our program.
 
 Best regards,
 {your_name}
+Financial Education Partnership Manager
     """,
     "linkedin_message": """
 Hi {first_name},
 
-I help business owners like you plan their exit strategy. Given that {company_name} has been successful for {business_age} years, you might be thinking about succession planning.
+I help high schools implement financial literacy programs that teach students real investing and personal finance. Our platform has helped 10,000+ students with a 95% success rate.
 
-Would you be open to a quick call to discuss your options?
+Given that {company_name} serves students in the Baltimore area, I'd love to discuss how we could partner to bring financial education to your school.
+
+Would you be open to a quick call to explore this opportunity?
 
 Best,
 {your_name}

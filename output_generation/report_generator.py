@@ -40,8 +40,9 @@ class ReportGenerator:
             self._create_excel_report(export_data, output_path)
         
         if OUTPUT_CONFIG["output_format"] in ["csv", "both"]:
-            # Create CSV version
-            csv_path = output_path.replace('.xlsx', '.csv')
+            # Create CSV version - save as leads.csv
+            downloads_path = os.path.expanduser("~/Downloads")
+            csv_path = os.path.join(downloads_path, "leads.csv")
             self._create_csv_report(export_data, csv_path)
             self.logger.info(f"CSV report generated: {csv_path}")
         
@@ -278,9 +279,58 @@ class ReportGenerator:
             cell.alignment = header_alignment
     
     def _create_csv_report(self, export_data: Dict, output_path: str):
-        """Create CSV report (simplified version)"""
-        # Use companies data as main CSV
-        df = pd.DataFrame(export_data['companies'])
+        """Create CSV report with companies and decision makers"""
+        # Combine companies with their decision makers for a comprehensive CSV
+        combined_data = []
+        
+        for company in export_data['companies']:
+            decision_makers = export_data['decision_makers']
+            company_dms = [dm for dm in decision_makers if dm['Company Name'] == company['Company Name']]
+            
+            if company_dms:
+                # Create a row for each decision maker
+                for dm in company_dms:
+                    combined_row = {
+                        'Company Name': company['Company Name'],
+                        'Industry': company['Industry'],
+                        'Location': company['Location'],
+                        'Employee Count': company['Employee Count'],
+                        'Revenue Range': company['Revenue Range'],
+                        'Business Age (Years)': company['Business Age (Years)'],
+                        'Website': company['Website'],
+                        'Phone': company['Phone'],
+                        'Qualification Score': company['Qualification Score'],
+                        'Grade': company['Grade'],
+                        'Contact Name': dm['Decision Maker Name'],
+                        'Contact Title': dm['Title'],
+                        'Contact Email': dm['Email'],
+                        'Contact Phone': dm['Phone'],
+                        'Contact LinkedIn': dm['LinkedIn URL']
+                    }
+                    combined_data.append(combined_row)
+            else:
+                # If no decision makers, still include the company
+                combined_row = {
+                    'Company Name': company['Company Name'],
+                    'Industry': company['Industry'],
+                    'Location': company['Location'],
+                    'Employee Count': company['Employee Count'],
+                    'Revenue Range': company['Revenue Range'],
+                    'Business Age (Years)': company['Business Age (Years)'],
+                    'Website': company['Website'],
+                    'Phone': company['Phone'],
+                    'Qualification Score': company['Qualification Score'],
+                    'Grade': company['Grade'],
+                    'Contact Name': 'N/A',
+                    'Contact Title': 'N/A',
+                    'Contact Email': 'N/A',
+                    'Contact Phone': 'N/A',
+                    'Contact LinkedIn': 'N/A'
+                }
+                combined_data.append(combined_row)
+        
+        # Create DataFrame and save as CSV
+        df = pd.DataFrame(combined_data)
         df.to_csv(output_path, index=False)
         
         self.logger.info(f"CSV report generated: {output_path}")
