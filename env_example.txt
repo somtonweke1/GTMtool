@@ -1,0 +1,24 @@
+# Transition Scout Environment Configuration
+# Copy this file to .env and fill in your actual API keys
+
+# LinkedIn Sales Navigator Credentials
+LINKEDIN_EMAIL=your_linkedin_email@example.com
+LINKEDIN_PASSWORD=your_linkedin_password
+LINKEDIN_API_KEY=your_linkedin_api_key_optional
+
+# Apollo API (for contact enrichment)
+APOLLO_API_KEY=your_apollo_api_key_here
+
+# Hunter.io API (for email verification)
+HUNTER_API_KEY=your_hunter_api_key_here
+
+# ZoomInfo API (for business intelligence)
+ZOOMINFO_API_KEY=your_zoominfo_api_key_here
+
+# Optional: Proxy Configuration (if needed)
+# HTTP_PROXY=http://proxy.example.com:8080
+# HTTPS_PROXY=https://proxy.example.com:8080
+
+# Optional: Rate Limiting
+# MAX_REQUESTS_PER_MINUTE=60
+# DELAY_BETWEEN_REQUESTS=2
